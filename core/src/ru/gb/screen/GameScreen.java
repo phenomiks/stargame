@@ -2,12 +2,14 @@ package ru.gb.screen;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.gb.base.BaseScreen;
 import ru.gb.math.Rect;
 import ru.gb.sprite.Background;
 import ru.gb.sprite.Star;
+import ru.gb.sprite.Starship;
 
 public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 64;
@@ -17,6 +19,8 @@ public class GameScreen extends BaseScreen {
     private Background background;
 
     private Star[] stars;
+    private Starship starship;
+    private TextureRegion starshipRegion;
 
     @Override
     public void show() {
@@ -28,6 +32,11 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
+
+        starshipRegion = new TextureRegion(atlas.findRegion("main_ship"));
+        starshipRegion.setRegion(starshipRegion.getRegionX(), starshipRegion.getRegionY(),
+                390 / 2, 287);
+        starship = new Starship(starshipRegion);
     }
 
     @Override
@@ -44,6 +53,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.resize(worldBounds);
         }
+        starship.resize(worldBounds);
     }
 
     @Override
@@ -55,17 +65,20 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
+        starship.keyDown(keycode);
         return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        starship.keyUp(keycode);
         return super.keyUp(keycode);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        return super.touchDown(touch, pointer, button);
+        starship.touchDown(touch, pointer, button);
+        return false;
     }
 
     @Override
@@ -85,6 +98,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
+        starship.draw(batch);
         batch.end();
     }
 }
