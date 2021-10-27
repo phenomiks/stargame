@@ -37,7 +37,7 @@ public class MainShip extends Sprite {
 
     private float currentTimeAutoShooting = 0;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
@@ -46,7 +46,7 @@ public class MainShip extends Sprite {
         this.damage = 1;
         this.v = new Vector2();
         this.v0 = new Vector2(0.5f, 0);
-        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
+        this.shootSound = shootSound;
     }
 
     @Override
