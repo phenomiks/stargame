@@ -1,5 +1,7 @@
 package ru.gb.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -35,6 +37,15 @@ public class GameScreen extends BaseScreen {
         bulletPool = new BulletPool();
 
         mainShip = new MainShip(atlas, bulletPool);
+
+        playFontMusic();
+    }
+
+    private void playFontMusic() {
+        Music fontMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        fontMusic.setVolume(1f);
+        fontMusic.setLooping(true);
+        fontMusic.play();
     }
 
     @Override

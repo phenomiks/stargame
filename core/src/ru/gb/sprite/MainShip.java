@@ -1,6 +1,8 @@
 package ru.gb.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +15,7 @@ public class MainShip extends Sprite {
     private static final float HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.05f;
     private static final int INVALID_POINTER = -1;
+    private static final float TIME_AUTO_SHOOTING = 0.2f;
 
     private final BulletPool bulletPool;
     private final TextureRegion bulletRegion;
@@ -27,8 +30,12 @@ public class MainShip extends Sprite {
     private boolean pressedLeft;
     private boolean pressedRight;
 
+    private final Sound shootSound;
+
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
+
+    private float currentTimeAutoShooting = 0;
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
@@ -39,6 +46,7 @@ public class MainShip extends Sprite {
         this.damage = 1;
         this.v = new Vector2();
         this.v0 = new Vector2(0.5f, 0);
+        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
     }
 
     @Override
@@ -66,6 +74,12 @@ public class MainShip extends Sprite {
         }
         if (getRight() < worldBounds.getLeft()) {
             setLeft(worldBounds.getRight());
+        }
+
+        currentTimeAutoShooting += delta;
+        if (currentTimeAutoShooting >= TIME_AUTO_SHOOTING) {
+            currentTimeAutoShooting -= TIME_AUTO_SHOOTING;
+            shoot();
         }
     }
 
@@ -165,5 +179,6 @@ public class MainShip extends Sprite {
     private void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, this.pos, bulletV, worldBounds, bulletHeight, damage);
+        shootSound.play(0.2f);
     }
 }
