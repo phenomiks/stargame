@@ -9,6 +9,8 @@ import ru.gb.math.Rect;
 import ru.gb.pool.BulletPool;
 
 public class EnemyShip extends Ship {
+    private boolean isInside;
+
     public EnemyShip(BulletPool bulletPool, Rect worldBounds, Sound bulletSound) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
@@ -21,6 +23,15 @@ public class EnemyShip extends Ship {
 
     @Override
     public void update(float delta) {
+        if (getTop() > worldBounds.getTop()) {
+            v.set(0, -0.3f);
+            reloadTimer = 0f;
+            isInside = false;
+        } else if (!isInside) {
+            reloadTimer = reloadInterval;
+            v.set(v0);
+            isInside = true;
+        }
         super.update(delta);
         if (getBottom() < worldBounds.getBottom()) {
             destroy();
@@ -46,6 +57,7 @@ public class EnemyShip extends Ship {
         this.damage = damage;
         this.hp = hp;
         this.reloadInterval = reloadInterval;
+        this.v0.set(v);
         setHeightProportion(height);
     }
 }
