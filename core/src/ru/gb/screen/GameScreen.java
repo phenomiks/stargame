@@ -12,6 +12,7 @@ import ru.gb.math.Rect;
 import ru.gb.pool.BulletPool;
 import ru.gb.pool.EnemyPool;
 import ru.gb.sprite.Background;
+import ru.gb.sprite.EnemyShip;
 import ru.gb.sprite.MainShip;
 import ru.gb.sprite.Star;
 import ru.gb.util.EnemyEmitter;
@@ -136,6 +137,17 @@ public class GameScreen extends BaseScreen {
         bulletPool.drawActiveObjects(batch);
         enemyPool.drawActiveObjects(batch);
         mainShip.draw(batch);
+
+        checkCollision();
+
         batch.end();
+    }
+
+    private void checkCollision() {
+        for (EnemyShip ship : enemyPool.getActiveObjects()) {
+            if (!mainShip.isOutside(ship)) {
+                ship.destroy();
+            }
+        }
     }
 }
